@@ -7,7 +7,7 @@ int right(int);
 void build_max_heap(int A[]);
 void bubble_down_max(int A[], int);
 void bubble_up_max(int A[], int);
-void max_heap_insert(int A[], int);
+void max_heap_insert(int A[], int, int);
 int max_extract(int A[]);
 void heap_sort_max(int A[]);
 
@@ -39,11 +39,16 @@ int main(int argc, char *argv[])
 	for (i = 0; i <= A[0]; i++) {
 		printf("A[%d] = %d \n", i, A[i]);
 	}
+	int length = sizeof(A)/sizeof(A[0]);
+	max_heap_insert(A, length, 20);
+	printf("Number of elements in the heap is: %d\n", A[0]);
+	for (i = 0; i <= A[0]; i++) {
+		printf("A[%d] = %d \n", i, A[i]);
+	}
 	heap_sort_max(A);
 	printf("After sorting\n");
-	int length = sizeof(A)/sizeof(A[0]);
 	printf("length of array is %d\n", length);
-	for (i = 0; i < length - 1; i++) {
+	for (i = 0; i < length; i++) {
 		printf("A[%d] = %d \n", i, A[i]);
 	}
 
@@ -109,20 +114,32 @@ void bubble_down_max(int A[], int i)
 void bubble_up_max(int A[], int i)
 {
 	int p = parent(i);
-	if (p == -1 || p == 1)
+	if (p == -1)
 		return;
-	if (p < A[i]) {
+	if (A[p] < A[i]) {
 		swap(&A[p], &A[i]);
 		bubble_up_max(A, p);
 	}
 }
 
-void max_heap_insert(int A[], int)
+void max_heap_insert(int A[], int length, int key)
 {
-	// Insert at end of the heap
-	// bubble up till you find proper place
+	int hsize = A[0];
+	// Check if heap size is not full
+	printf("length %d\n", length);
+	if (hsize >= length - 1) {
+		printf("ERROR: overflow\n");
+		return;
+	}
 
+	// Insert at end of the heap
+	A[0] += 1;
+	hsize = A[0];
+	A[hsize] = key;
+	// bubble up till you find proper place
+	bubble_up_max(A, hsize);
 }
+
 int max_extract(int A[])
 {
 	int hsize = A[0];
